@@ -2,18 +2,13 @@ package com.example.mvppattern.cache;
 
 import android.content.Context;
 
-import com.example.mvppattern.Logger;
+import com.example.mvppattern.Utils.Logger;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
-
-import android.content.Context;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 
 /**
  * 操作内存文件的工具类

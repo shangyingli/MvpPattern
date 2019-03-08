@@ -3,7 +3,7 @@ package com.example.mvppattern.cache;
 import android.graphics.Bitmap;
 import android.util.LruCache;
 
-import com.example.mvppattern.Logger;
+import com.example.mvppattern.Utils.Logger;
 
 import java.lang.ref.SoftReference;
 import java.util.Map;

@@ -1,35 +1,21 @@
 package com.example.mvppattern.model;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.os.Environment;
-import android.util.Log;
-import android.widget.Switch;
 
 import com.example.mvppattern.BuildConfig;
-import com.example.mvppattern.Logger;
+import com.example.mvppattern.Utils.Logger;
 import com.example.mvppattern.bean.CatBean;
-import com.example.mvppattern.cache.CacheUtil;
-import com.example.mvppattern.cache.FileUtil;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
-import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -115,7 +101,6 @@ public class CatsModelImp implements CatsModel {
         requestBody.put("password", "123455");
         Observable<List<CatBean>> observableCats = apiService.getCatsData(requestBody);
         observableCats
-                .retry()
                 .retryWhen(new Function<Observable<Throwable>, ObservableSource<?>>() {
                     @Override
                     public ObservableSource<?> apply(Observable<Throwable> throwableObservable) throws Exception {

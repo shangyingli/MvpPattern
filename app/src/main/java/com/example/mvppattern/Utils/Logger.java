@@ -1,4 +1,4 @@
-package com.example.mvppattern;
+package com.example.mvppattern.Utils;
 
 import android.os.Looper;
 import android.text.TextUtils;
