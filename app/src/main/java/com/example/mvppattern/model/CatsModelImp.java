@@ -101,6 +101,13 @@ public class CatsModelImp implements CatsModel {
         requestBody.put("password", "123455");
         Observable<List<CatBean>> observableCats = apiService.getCatsData(requestBody);
         observableCats
+                .doOnNext(new Consumer<List<CatBean>>() {
+                    @Override
+                    public void accept(List<CatBean> catBeans) throws Exception {
+                        Logger.d("doOnNext : Thread : " + Thread.currentThread().getName());
+                        Logger.d("catsBean : " + catBeans.toString());
+                    }
+                })
                 .retryWhen(new Function<Observable<Throwable>, ObservableSource<?>>() {
                     @Override
                     public ObservableSource<?> apply(Observable<Throwable> throwableObservable) throws Exception {
@@ -122,13 +129,6 @@ public class CatsModelImp implements CatsModel {
                                 }
                             }
                         });
-                    }
-                })
-                .doOnNext(new Consumer<List<CatBean>>() {
-                    @Override
-                    public void accept(List<CatBean> catBeans) throws Exception {
-                        Logger.d("doOnNext : Thread : " + Thread.currentThread().getName());
-                        Logger.d("catsBean : " + catBeans.toString());
                     }
                 })
                 .subscribeOn(Schedulers.io())

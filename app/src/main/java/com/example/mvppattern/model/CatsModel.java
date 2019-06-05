@@ -10,4 +10,5 @@ public interface CatsModel {
      */
 
     void getCatsData(String url, CallBack callBack);
+
 }

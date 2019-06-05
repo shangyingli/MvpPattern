@@ -8,6 +8,9 @@ import com.example.mvppattern.Utils.Logger;
 import java.lang.ref.SoftReference;
 import java.util.Map;
 
+/**
+ * 内存缓存
+ */
 public class ImageCache extends LruCache<String, Bitmap> {
 
     //软引用，将从LruCache中被移除的图片存入软引用

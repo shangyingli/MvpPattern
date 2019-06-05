@@ -8,6 +8,6 @@ public interface ICatView {
 
     void showLoading();
 
-    void showCats(List<CatBean> catBeans);
+    void  showCats(List<CatBean> catBeans);
 
 }

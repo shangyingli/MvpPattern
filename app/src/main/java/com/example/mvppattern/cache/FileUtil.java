@@ -11,7 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 
 /**
- * 操作内存文件的工具类
+ * 本地缓存
  */
 public class FileUtil {
     private static FileUtil instance;

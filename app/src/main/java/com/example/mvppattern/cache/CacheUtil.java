@@ -28,6 +28,10 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
 
+/**
+ * 该工具类实现了图片加载三级缓存
+ */
+
 public class CacheUtil {
 
     private volatile static CacheUtil instance;
@@ -73,17 +77,21 @@ public class CacheUtil {
      * @return
      */
     private Observable<Bitmap> getFromMemeoryCache(final String fileMame) {
-        return Observable.create(new ObservableOnSubscribe<Bitmap>() {
-            @Override
-            public void subscribe(ObservableEmitter<Bitmap> emitter) throws Exception {
-                Bitmap bitmap = getImageFromMemoryCache(fileMame);
-                if (bitmap != null) {
-                    emitter.onNext(bitmap);
-                } else {
-                    emitter.onComplete();
-                }
-            }
-        });
+        return Observable
+                .create(new ObservableOnSubscribe<Bitmap>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<Bitmap> emitter) throws Exception {
+                        Bitmap bitmap = getImageFromMemoryCache(fileMame);
+                        if (bitmap != null) {
+                            Logger.d("Thread: " + Thread.currentThread().getName());
+                            emitter.onNext(bitmap);
+                        } else {
+                            emitter.onComplete();
+                        }
+                    }
+                });
+
+
     }
 
     /**
@@ -93,17 +101,19 @@ public class CacheUtil {
      * @return
      */
     private Observable<Bitmap> getFromLocal(final String fileName) {
-        return Observable.create(new ObservableOnSubscribe<Bitmap>() {
-            @Override
-            public void subscribe(ObservableEmitter<Bitmap> emitter) throws Exception {
-                Bitmap bitmap = getImageFromLocal(fileName);
-                if (bitmap != null) {
-                    emitter.onNext(bitmap);
-                } else {
-                    emitter.onComplete();
-                }
-            }
-        });
+        return Observable
+                .create(new ObservableOnSubscribe<Bitmap>() {
+                    @Override
+                    public void subscribe(ObservableEmitter<Bitmap> emitter) throws Exception {
+                        Bitmap bitmap = getImageFromLocal(fileName);
+                        if (bitmap != null) {
+                            Logger.d("thread : " + Thread.currentThread().getName());
+                            emitter.onNext(bitmap);
+                        } else {
+                            emitter.onComplete();
+                        }
+                    }
+                });
     }
 
     /**
@@ -134,8 +144,6 @@ public class CacheUtil {
         CatsModelImp catsModelImp = new CatsModelImp();
         return catsModelImp
                 .getFileFromWeb(fileUrl)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .map(new Function<ResponseBody, InputStream>() {
                     @Override
                     public InputStream apply(ResponseBody responseBody) throws Exception {
@@ -205,13 +213,15 @@ public class CacheUtil {
     @SuppressWarnings("unchecked")
     public void setImageToViewByRxJava(final String fileUrl, final ImageView imageView) {
         final String fileName = fileUrl.substring(fileUrl.lastIndexOf(File.separator) + 1);
-        //添加队列， 使得同一时间只能有固定的任务
         Disposable disposable = Observable.concat(getFromMemeoryCache(getMd5(fileName)), getFromLocal(getMd5(fileName)), getFromWeb(fileUrl))
                 .firstElement()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Bitmap>() {
                     @Override
                     public void accept(Bitmap bitmap) throws Exception {
                         if (bitmap != null) {
+                            Logger.d("thread : " + Thread.currentThread().getName());
                             imageView.setImageBitmap(bitmap);
                         }
                     }

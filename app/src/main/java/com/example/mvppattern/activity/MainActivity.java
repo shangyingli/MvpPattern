@@ -38,12 +38,12 @@ public class MainActivity extends BaseActivity<ICatView, BasePresenter<ICatView>
 
     @Override
     protected BasePresenter<ICatView> createPresenter() {
-        return new CatPresenter(this);
+        return new CatPresenter(getApplicationContext());
     }
 
     protected void initComponent() {
         listView = findViewById(R.id.cats_list);
-        adapter = new CatAdapter(this, catsList);
+        adapter = new CatAdapter(this, catsList, mPresenter);
         listView.setAdapter(adapter);
 
     }
@@ -56,6 +56,7 @@ public class MainActivity extends BaseActivity<ICatView, BasePresenter<ICatView>
     @Override
     public void showCats(List<CatBean> catBeans) {
         this.catsList.clear();
+        this.catsList.addAll(catBeans);
         this.catsList.addAll(catBeans);
         freshView();
     }

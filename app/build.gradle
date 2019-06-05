@@ -37,6 +37,6 @@ dependencies {
     // 支持Gson解析
     implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1'
-
+    //支持注解
     implementation 'com.android.support:support-annotations:28.0.0'
 }

@@ -13,6 +13,7 @@ import com.example.mvppattern.Utils.Logger;
 import com.example.mvppattern.R;
 import com.example.mvppattern.bean.CatBean;
 import com.example.mvppattern.cache.CacheUtil;
+import com.example.mvppattern.present.BasePresenter;
 
 import java.util.List;
 
@@ -20,10 +21,12 @@ public class CatAdapter extends BaseAdapter {
 
     private Context context;
     private List<CatBean> catBeans;
+    private BasePresenter presenter;
 
-    public CatAdapter(Context context, List<CatBean> catsData) {
+    public CatAdapter(Context context, List<CatBean> catsData, BasePresenter presenter) {
         this.context  = context;
         this.catBeans = catsData;
+        this.presenter = presenter;
         Logger.d("size : " + catsData.size());
     }
 
@@ -45,9 +48,17 @@ public class CatAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
+    /**
+     * getView会被调用多次的原因是因为 ： 在加载view时， 会走onLayout, OnMeasure方法， 里面会调用getView方法
+     * 根本原因是listView没有固定高度
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @SuppressLint("InflateParams")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -63,12 +74,10 @@ public class CatAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         Logger.d("position : " + position);
-        //可用glide加载图片
         CatBean catBean = catBeans.get(position);
-        CacheUtil.getInstance(context).setImageToViewByRxJava(catBean.getImageUrl(), viewHolder.catView);
+        presenter.loadImage(catBean.getImageUrl(), viewHolder.catView);
         viewHolder.catDesc.setText(catBean.getDesc());
         return convertView;
     }
-
 
 }

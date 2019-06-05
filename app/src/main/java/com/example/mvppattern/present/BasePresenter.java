@@ -1,10 +1,14 @@
 package com.example.mvppattern.present;
 
+import android.widget.ImageView;
+
 import java.lang.ref.WeakReference;
 
 public abstract class BasePresenter<T> {
 
     public abstract void fetch();
+
+    public abstract void loadImage(String url, ImageView view);
 
     protected WeakReference<T> mViewReference;
 
